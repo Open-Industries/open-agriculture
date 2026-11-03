@@ -1,7 +1,20 @@
-.PHONY: validate test
+# Open Agriculture — Reference Smart Farming Core Platform — developer entry points
+.PHONY: build test verify dev-pilot compose-up compose-down
 
-validate:
-	@python3 -c 'import json,pathlib; [json.loads(p.read_text()) for p in pathlib.Path(".").rglob("*.json")]; print("JSON valid")'
+build:
+	mvn -q package -DskipTests
 
-test: validate
-	@echo "Add executable contract, integration, resilience and performance tests under tests/."
+test:
+	mvn test
+
+verify:           ## Full verification (life-cycle gate G3)
+	mvn verify
+
+dev-pilot:
+	mvn -pl services/field-service quarkus:dev
+
+compose-up:
+	docker compose up -d
+
+compose-down:
+	docker compose down
