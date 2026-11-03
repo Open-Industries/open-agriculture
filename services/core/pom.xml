@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Open Agriculture — core domain service (reference implementation).
+  Java 21, Quarkus 3.x + Apache Camel (camel-quarkus, platform-http),
+  in-memory store only. No database, no cloud SDKs, no provider-specific
+  dependencies. Supersedes the standalone Camel Main + Jetty runtime of
+  ADR 0002; see ADR 0003. License: Apache-2.0 (same as the upstream
+  reference scaffold).
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>org.openagriculture</groupId>
+  <artifactId>open-agriculture-core</artifactId>
+  <version>0.1.0</version>
+  <packaging>jar</packaging>
+  <name>Open Agriculture Core Service</name>
+  <description>Generic multi-tenant agriculture + livestock core: organizations, establishments, parcels, crop seasons, animals, herds and traceable batches, exposed over OpenAPI and CloudEvents.</description>
+
+  <properties>
+    <java.version>21</java.version>
+    <maven.compiler.release>21</maven.compiler.release>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <!-- Mutually compatible pair, verified by resolution + full test run:
+         camel-quarkus 3.15.0 is built against the Quarkus 3.15 line. -->
+    <quarkus.platform.version>3.15.1</quarkus.platform.version>
+    <camel-quarkus.version>3.15.0</camel-quarkus.version>
+    <jackson.version>2.17.2</jackson.version>
+    <networknt.version>1.5.1</networknt.version>
+    <snakeyaml.version>2.3</snakeyaml.version>
+  </properties>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>io.quarkus.platform</groupId>
+        <artifactId>quarkus-bom</artifactId>
+        <version>${quarkus.platform.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.camel.quarkus</groupId>
+        <artifactId>camel-quarkus-bom</artifactId>
+        <version>${camel-quarkus.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <dependencies>
+    <!-- Quarkus runtime + Camel routes on the Quarkus HTTP server
+         (platform-http is backed by Vert.x under camel-quarkus; the
+         standalone Camel Main platform-http engine gap does not apply). -->
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-arc</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.camel.quarkus</groupId>
+      <artifactId>camel-quarkus-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.camel.quarkus</groupId>
+      <artifactId>camel-quarkus-platform-http</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.camel.quarkus</groupId>
+      <artifactId>camel-quarkus-rest</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+      <version>${jackson.version}</version>
+    </dependency>
+
+    <!-- Tests -->
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-junit5</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.rest-assured</groupId>
+      <artifactId>rest-assured</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.networknt</groupId>
+      <artifactId>json-schema-validator</artifactId>
+      <version>${networknt.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.yaml</groupId>
+      <artifactId>snakeyaml</artifactId>
+      <version>${snakeyaml.version}</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.13.0</version>
+        <configuration>
+          <release>21</release>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>3.2.5</version>
+        <configuration>
+          <!-- Contract tests read openapi.yaml / examples / contracts relatively
+               to the module directory; surefire already runs from there.
+               Quarkus tests use the automatic test HTTP port; RestAssured
+               is configured by the Quarkus test extension. -->
+          <!-- Force IPv4 loopback: without this, Java maps 127.0.0.1 to the
+               IPv6-mapped ::ffff:127.0.0.1, which sandboxed runtimes may
+               intercept instead of delivering to the local listener. -->
+          <argLine>-Djava.net.preferIPv4Stack=true</argLine>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>io.quarkus.platform</groupId>
+        <artifactId>quarkus-maven-plugin</artifactId>
+        <version>${quarkus.platform.version}</version>
+        <extensions>true</extensions>
+        <executions>
+          <execution>
+            <goals>
+              <goal>build</goal>
+              <goal>generate-code</goal>
+              <goal>generate-code-tests</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+</project>
