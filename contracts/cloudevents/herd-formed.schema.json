@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.org/open-agriculture/cloudevents/herd-formed.schema.json",
+  "title": "HerdFormed",
+  "type": "object",
+  "required": ["specversion", "id", "source", "type", "time", "datacontenttype", "subject", "tenantid", "correlationid", "causationid", "schemaversion", "purpose", "dataclassification", "data"],
+  "properties": {
+    "specversion": {"const": "1.0"},
+    "id": {"type": "string", "format": "uuid"},
+    "source": {"const": "/open-agriculture/core"},
+    "type": {"const": "HerdFormed"},
+    "time": {"type": "string", "format": "date-time"},
+    "datacontenttype": {"const": "application/json"},
+    "subject": {"type": "string"},
+    "tenantid": {"type": "string"},
+    "correlationid": {"type": "string", "format": "uuid"},
+    "causationid": {"type": "string"},
+    "schemaversion": {"const": "1.0"},
+    "purpose": {"type": "string"},
+    "dataclassification": {"type": "string"},
+    "data": {
+      "type": "object",
+      "required": ["id", "tenant_id", "schema_version", "status", "created_at", "updated_at", "establishment_id", "name", "species"],
+      "properties": {
+        "id": {"type": "string"},
+        "tenant_id": {"type": "string"},
+        "schema_version": {"const": "1.0"},
+        "status": {"enum": ["ACTIVE", "DISSOLVED"]},
+        "created_at": {"type": "string", "format": "date-time"},
+        "updated_at": {"type": "string", "format": "date-time"},
+        "establishment_id": {"type": "string"},
+        "name": {"type": "string"},
+        "species": {"enum": ["BOVINE", "OVINE", "PORCINE", "POULTRY", "OTHER"]},
+        "animal_ids": {"type": "array", "items": {"type": "string"}}
+      }
+    }
+  },
+  "additionalProperties": true
+}

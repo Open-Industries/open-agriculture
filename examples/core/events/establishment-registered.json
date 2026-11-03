@@ -1,0 +1,28 @@
+{
+  "specversion": "1.0",
+  "id": "e0000000-0000-4000-8000-000000000002",
+  "source": "/open-agriculture/core",
+  "type": "EstablishmentRegistered",
+  "time": "2026-11-03T12:00:00Z",
+  "datacontenttype": "application/json",
+  "subject": "22222222-2222-4222-8222-222222222222",
+  "tenantid": "tenant-demo",
+  "correlationid": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaa2",
+  "causationid": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaa2",
+  "schemaversion": "1.0",
+  "purpose": "core-registration",
+  "dataclassification": "synthetic",
+  "data": {
+    "id": "22222222-2222-4222-8222-222222222222",
+    "tenant_id": "tenant-demo",
+    "schema_version": "1.0",
+    "status": "ACTIVE",
+    "created_at": "2026-11-03T12:00:00Z",
+    "updated_at": "2026-11-03T12:00:00Z",
+    "organization_id": "11111111-1111-4111-8111-111111111111",
+    "name": "Establecimiento Ejemplo",
+    "kind": "FARM",
+    "location": "Zona Ejemplo",
+    "area_ha": 120.5
+  }
+}
