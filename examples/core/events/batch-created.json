@@ -1,0 +1,28 @@
+{
+  "specversion": "1.0",
+  "id": "e0000000-0000-4000-8000-000000000007",
+  "source": "/open-agriculture/core",
+  "type": "BatchCreated",
+  "time": "2026-11-03T12:00:00Z",
+  "datacontenttype": "application/json",
+  "subject": "77777777-7777-4777-8777-777777777777",
+  "tenantid": "tenant-demo",
+  "correlationid": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaa7",
+  "causationid": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaa7",
+  "schemaversion": "1.0",
+  "purpose": "core-registration",
+  "dataclassification": "synthetic",
+  "data": {
+    "id": "77777777-7777-4777-8777-777777777777",
+    "tenant_id": "tenant-demo",
+    "schema_version": "1.0",
+    "status": "CREATED",
+    "created_at": "2026-11-03T12:00:00Z",
+    "updated_at": "2026-11-03T12:00:00Z",
+    "source_type": "PARCEL",
+    "source_id": "33333333-3333-4333-8333-333333333333",
+    "product": "maíz grano",
+    "quantity": 800,
+    "unit": "kg"
+  }
+}

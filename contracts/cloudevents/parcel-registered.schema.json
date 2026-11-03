@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.org/open-agriculture/cloudevents/parcel-registered.schema.json",
+  "title": "ParcelRegistered",
+  "type": "object",
+  "required": ["specversion", "id", "source", "type", "time", "datacontenttype", "subject", "tenantid", "correlationid", "causationid", "schemaversion", "purpose", "dataclassification", "data"],
+  "properties": {
+    "specversion": {"const": "1.0"},
+    "id": {"type": "string", "format": "uuid"},
+    "source": {"const": "/open-agriculture/core"},
+    "type": {"const": "ParcelRegistered"},
+    "time": {"type": "string", "format": "date-time"},
+    "datacontenttype": {"const": "application/json"},
+    "subject": {"type": "string"},
+    "tenantid": {"type": "string"},
+    "correlationid": {"type": "string", "format": "uuid"},
+    "causationid": {"type": "string"},
+    "schemaversion": {"const": "1.0"},
+    "purpose": {"type": "string"},
+    "dataclassification": {"type": "string"},
+    "data": {
+      "type": "object",
+      "required": ["id", "tenant_id", "schema_version", "status", "created_at", "updated_at", "establishment_id", "name"],
+      "properties": {
+        "id": {"type": "string"},
+        "tenant_id": {"type": "string"},
+        "schema_version": {"const": "1.0"},
+        "status": {"enum": ["ACTIVE", "INACTIVE"]},
+        "created_at": {"type": "string", "format": "date-time"},
+        "updated_at": {"type": "string", "format": "date-time"},
+        "establishment_id": {"type": "string"},
+        "name": {"type": "string"},
+        "area_ha": {"type": "number"},
+        "soil_type": {"type": "string"}
+      }
+    }
+  },
+  "additionalProperties": true
+}

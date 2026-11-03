@@ -1,0 +1,887 @@
+openapi: 3.1.0
+info:
+  title: Open Agriculture Core API
+  version: 0.1.0
+  description: >-
+    Generic multi-tenant core for agriculture and livestock: organizations,
+    establishments, parcels, crop seasons, animals, herds and traceable
+    batches. This service contract extends the upstream Open Agriculture
+    Reference API style (DomainResource pattern, X-Correlation-ID on every
+    operation) with the first domain service's resources. All example data is
+    synthetic. License: Apache-2.0.
+  license:
+    name: Apache-2.0
+servers:
+  - url: https://api.example.org/open-agriculture/v1
+    description: Example server (synthetic; replace per deployment)
+paths:
+  /v1/organizations:
+    post:
+      summary: Register an organization (a tenant)
+      operationId: createOrganization
+      parameters:
+        - $ref: '#/components/parameters/CorrelationId'
+        - $ref: '#/components/parameters/TenantId'
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/CausationId'
+        - $ref: '#/components/parameters/Purpose'
+        - $ref: '#/components/parameters/DataClassification'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateOrganization'
+      responses:
+        '201':
+          description: Organization registered; OrganizationRegistered event emitted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organization'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+    get:
+      summary: List organizations of the calling tenant
+      operationId: listOrganizations
+      parameters:
+        - $ref: '#/components/parameters/CorrelationId'
+        - $ref: '#/components/parameters/TenantId'
+        - $ref: '#/components/parameters/StatusQuery'
+      responses:
+        '200':
+          description: Organizations of the tenant
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Organization'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+  /v1/organizations/{id}:
+    get:
+      summary: Get one organization of the calling tenant
+      operationId: getOrganization
+      parameters:
+        - $ref: '#/components/parameters/CorrelationId'
+        - $ref: '#/components/parameters/TenantId'
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Organization found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organization'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /v1/establishments:
+    post:
+      summary: Register an establishment (farm, ranch or plant)
+      operationId: createEstablishment
+      parameters:
+        - $ref: '#/components/parameters/CorrelationId'
+        - $ref: '#/components/parameters/TenantId'
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/CausationId'
+        - $ref: '#/components/parameters/Purpose'
+        - $ref: '#/components/parameters/DataClassification'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateEstablishment'
+      responses:
+        '201':
+          description: Establishment registered; EstablishmentRegistered event emitted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Establishment'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+    get:
+      summary: List establishments of the calling tenant
+      operationId: listEstablishments
+      parameters:
+        - $ref: '#/components/parameters/CorrelationId'
+        - $ref: '#/components/parameters/TenantId'
+        - $ref: '#/components/parameters/StatusQuery'
+      responses:
+        '200':
+          description: Establishments of the tenant
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Establishment'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+  /v1/establishments/{id}:
+    get:
+      summary: Get one establishment of the calling tenant
+      operationId: getEstablishment
+      parameters:
+        - $ref: '#/components/parameters/CorrelationId'
+        - $ref: '#/components/parameters/TenantId'
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Establishment found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Establishment'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /v1/parcels:
+    post:
+      summary: Register a parcel of agricultural land
+      operationId: createParcel
+      parameters:
+        - $ref: '#/components/parameters/CorrelationId'
+        - $ref: '#/components/parameters/TenantId'
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/CausationId'
+        - $ref: '#/components/parameters/Purpose'
+        - $ref: '#/components/parameters/DataClassification'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateParcel'
+      responses:
+        '201':
+          description: Parcel registered; ParcelRegistered event emitted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Parcel'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+    get:
+      summary: List parcels of the calling tenant
+      operationId: listParcels
+      parameters:
+        - $ref: '#/components/parameters/CorrelationId'
+        - $ref: '#/components/parameters/TenantId'
+        - $ref: '#/components/parameters/StatusQuery'
+      responses:
+        '200':
+          description: Parcels of the tenant
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Parcel'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+  /v1/parcels/{id}:
+    get:
+      summary: Get one parcel of the calling tenant
+      operationId: getParcel
+      parameters:
+        - $ref: '#/components/parameters/CorrelationId'
+        - $ref: '#/components/parameters/TenantId'
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Parcel found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Parcel'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /v1/crop-seasons:
+    post:
+      summary: Start a crop season on a parcel
+      operationId: createCropSeason
+      parameters:
+        - $ref: '#/components/parameters/CorrelationId'
+        - $ref: '#/components/parameters/TenantId'
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/CausationId'
+        - $ref: '#/components/parameters/Purpose'
+        - $ref: '#/components/parameters/DataClassification'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCropSeason'
+      responses:
+        '201':
+          description: Crop season started; CropSeasonStarted event emitted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CropSeason'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+    get:
+      summary: List crop seasons of the calling tenant
+      operationId: listCropSeasons
+      parameters:
+        - $ref: '#/components/parameters/CorrelationId'
+        - $ref: '#/components/parameters/TenantId'
+        - $ref: '#/components/parameters/StatusQuery'
+      responses:
+        '200':
+          description: Crop seasons of the tenant
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CropSeason'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+  /v1/crop-seasons/{id}:
+    get:
+      summary: Get one crop season of the calling tenant
+      operationId: getCropSeason
+      parameters:
+        - $ref: '#/components/parameters/CorrelationId'
+        - $ref: '#/components/parameters/TenantId'
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Crop season found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CropSeason'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /v1/animals:
+    post:
+      summary: Register an individual animal
+      operationId: createAnimal
+      parameters:
+        - $ref: '#/components/parameters/CorrelationId'
+        - $ref: '#/components/parameters/TenantId'
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/CausationId'
+        - $ref: '#/components/parameters/Purpose'
+        - $ref: '#/components/parameters/DataClassification'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateAnimal'
+      responses:
+        '201':
+          description: Animal registered; AnimalRegistered event emitted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Animal'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+    get:
+      summary: List animals of the calling tenant
+      operationId: listAnimals
+      parameters:
+        - $ref: '#/components/parameters/CorrelationId'
+        - $ref: '#/components/parameters/TenantId'
+        - $ref: '#/components/parameters/StatusQuery'
+      responses:
+        '200':
+          description: Animals of the tenant
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Animal'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+  /v1/animals/{id}:
+    get:
+      summary: Get one animal of the calling tenant
+      operationId: getAnimal
+      parameters:
+        - $ref: '#/components/parameters/CorrelationId'
+        - $ref: '#/components/parameters/TenantId'
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Animal found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Animal'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /v1/herds:
+    post:
+      summary: Form a herd (managed group of animals)
+      operationId: createHerd
+      parameters:
+        - $ref: '#/components/parameters/CorrelationId'
+        - $ref: '#/components/parameters/TenantId'
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/CausationId'
+        - $ref: '#/components/parameters/Purpose'
+        - $ref: '#/components/parameters/DataClassification'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateHerd'
+      responses:
+        '201':
+          description: Herd formed; HerdFormed event emitted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Herd'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+    get:
+      summary: List herds of the calling tenant
+      operationId: listHerds
+      parameters:
+        - $ref: '#/components/parameters/CorrelationId'
+        - $ref: '#/components/parameters/TenantId'
+        - $ref: '#/components/parameters/StatusQuery'
+      responses:
+        '200':
+          description: Herds of the tenant
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Herd'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+  /v1/herds/{id}:
+    get:
+      summary: Get one herd of the calling tenant
+      operationId: getHerd
+      parameters:
+        - $ref: '#/components/parameters/CorrelationId'
+        - $ref: '#/components/parameters/TenantId'
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Herd found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Herd'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /v1/batches:
+    post:
+      summary: Create a traceable batch from a parcel or a herd
+      operationId: createBatch
+      parameters:
+        - $ref: '#/components/parameters/CorrelationId'
+        - $ref: '#/components/parameters/TenantId'
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/CausationId'
+        - $ref: '#/components/parameters/Purpose'
+        - $ref: '#/components/parameters/DataClassification'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateBatch'
+      responses:
+        '201':
+          description: Batch created; BatchCreated event emitted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Batch'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+    get:
+      summary: List batches of the calling tenant
+      operationId: listBatches
+      parameters:
+        - $ref: '#/components/parameters/CorrelationId'
+        - $ref: '#/components/parameters/TenantId'
+        - $ref: '#/components/parameters/StatusQuery'
+      responses:
+        '200':
+          description: Batches of the tenant
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Batch'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+  /v1/batches/{id}:
+    get:
+      summary: Get one batch of the calling tenant
+      operationId: getBatch
+      parameters:
+        - $ref: '#/components/parameters/CorrelationId'
+        - $ref: '#/components/parameters/TenantId'
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Batch found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Batch'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+components:
+  parameters:
+    CorrelationId:
+      name: X-Correlation-ID
+      in: header
+      required: true
+      description: Upstream envelope correlation id; must be a UUID.
+      schema:
+        type: string
+        format: uuid
+    TenantId:
+      name: X-Tenant-ID
+      in: header
+      required: true
+      description: Tenant (organization) the caller acts for; scopes all reads and writes.
+      schema:
+        type: string
+    CausationId:
+      name: X-Causation-ID
+      in: header
+      required: false
+      description: Id of the command/event that caused this request; defaults to the correlation id.
+      schema:
+        type: string
+    IdempotencyKey:
+      name: Idempotency-Key
+      in: header
+      required: false
+      description: Caller-supplied key; a repeated create with the same key, tenant and entity returns the original resource.
+      schema:
+        type: string
+    Purpose:
+      name: X-Purpose
+      in: header
+      required: false
+      description: Envelope purpose; defaults to core-registration.
+      schema:
+        type: string
+    DataClassification:
+      name: X-Data-Classification
+      in: header
+      required: false
+      description: Envelope data classification; defaults to synthetic.
+      schema:
+        type: string
+    StatusQuery:
+      name: status
+      in: query
+      required: false
+      description: Filter the list by lifecycle status.
+      schema:
+        type: string
+  responses:
+    BadRequest:
+      description: Invalid request (missing/invalid envelope headers, unknown fields, bad references, invalid status)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Resource not found, or owned by another tenant
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    CoreResource:
+      description: Upstream DomainResource pattern plus the multi-tenant envelope field. Additional properties are allowed as open metadata.
+      type: object
+      required:
+        - id
+        - tenant_id
+        - schema_version
+        - status
+        - created_at
+        - updated_at
+      properties:
+        id:
+          type: string
+        tenant_id:
+          type: string
+        schema_version:
+          type: string
+          const: '1.0'
+        status:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+      additionalProperties: true
+    Error:
+      type: object
+      required:
+        - error
+      properties:
+        error:
+          type: string
+    Organization:
+      allOf:
+        - $ref: '#/components/schemas/CoreResource'
+        - type: object
+          properties:
+            status:
+              type: string
+              enum: [ACTIVE, SUSPENDED]
+            name:
+              type: string
+            country:
+              type: string
+          required:
+            - name
+    CreateOrganization:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Optional caller-supplied id; a UUID is generated when omitted.
+        name:
+          type: string
+        country:
+          type: string
+        status:
+          type: string
+          enum: [ACTIVE, SUSPENDED]
+      required:
+        - name
+    Establishment:
+      allOf:
+        - $ref: '#/components/schemas/CoreResource'
+        - type: object
+          properties:
+            status:
+              type: string
+              enum: [ACTIVE, INACTIVE]
+            organization_id:
+              type: string
+            name:
+              type: string
+            kind:
+              type: string
+              enum: [FARM, RANCH, PLANT]
+            location:
+              type: string
+            area_ha:
+              type: number
+          required:
+            - organization_id
+            - name
+    CreateEstablishment:
+      type: object
+      properties:
+        id:
+          type: string
+        organization_id:
+          type: string
+        name:
+          type: string
+        kind:
+          type: string
+          enum: [FARM, RANCH, PLANT]
+        location:
+          type: string
+        area_ha:
+          type: number
+        status:
+          type: string
+          enum: [ACTIVE, INACTIVE]
+      required:
+        - organization_id
+        - name
+    Parcel:
+      allOf:
+        - $ref: '#/components/schemas/CoreResource'
+        - type: object
+          properties:
+            status:
+              type: string
+              enum: [ACTIVE, INACTIVE]
+            establishment_id:
+              type: string
+            name:
+              type: string
+            area_ha:
+              type: number
+            soil_type:
+              type: string
+          required:
+            - establishment_id
+            - name
+    CreateParcel:
+      type: object
+      properties:
+        id:
+          type: string
+        establishment_id:
+          type: string
+        name:
+          type: string
+        area_ha:
+          type: number
+        soil_type:
+          type: string
+        status:
+          type: string
+          enum: [ACTIVE, INACTIVE]
+      required:
+        - establishment_id
+        - name
+    CropSeason:
+      allOf:
+        - $ref: '#/components/schemas/CoreResource'
+        - type: object
+          properties:
+            status:
+              type: string
+              enum: [PLANNED, ACTIVE, HARVESTED, CLOSED]
+            parcel_id:
+              type: string
+            crop:
+              type: string
+            season:
+              type: string
+            planned_start:
+              type: string
+              format: date
+            planned_end:
+              type: string
+              format: date
+          required:
+            - parcel_id
+            - crop
+            - season
+    CreateCropSeason:
+      type: object
+      properties:
+        id:
+          type: string
+        parcel_id:
+          type: string
+        crop:
+          type: string
+        season:
+          type: string
+        planned_start:
+          type: string
+          format: date
+        planned_end:
+          type: string
+          format: date
+        status:
+          type: string
+          enum: [PLANNED, ACTIVE, HARVESTED, CLOSED]
+      required:
+        - parcel_id
+        - crop
+        - season
+    Animal:
+      allOf:
+        - $ref: '#/components/schemas/CoreResource'
+        - type: object
+          properties:
+            status:
+              type: string
+              enum: [ALIVE, SOLD, DECEASED]
+            establishment_id:
+              type: string
+            species:
+              type: string
+              enum: [BOVINE, OVINE, PORCINE, POULTRY, OTHER]
+            breed:
+              type: string
+            sex:
+              type: string
+            birth_date:
+              type: string
+              format: date
+            tag:
+              type: string
+          required:
+            - establishment_id
+            - species
+    CreateAnimal:
+      type: object
+      properties:
+        id:
+          type: string
+        establishment_id:
+          type: string
+        species:
+          type: string
+          enum: [BOVINE, OVINE, PORCINE, POULTRY, OTHER]
+        breed:
+          type: string
+        sex:
+          type: string
+        birth_date:
+          type: string
+          format: date
+        tag:
+          type: string
+        status:
+          type: string
+          enum: [ALIVE, SOLD, DECEASED]
+      required:
+        - establishment_id
+        - species
+    Herd:
+      allOf:
+        - $ref: '#/components/schemas/CoreResource'
+        - type: object
+          properties:
+            status:
+              type: string
+              enum: [ACTIVE, DISSOLVED]
+            establishment_id:
+              type: string
+            name:
+              type: string
+            species:
+              type: string
+              enum: [BOVINE, OVINE, PORCINE, POULTRY, OTHER]
+            animal_ids:
+              type: array
+              items:
+                type: string
+          required:
+            - establishment_id
+            - name
+            - species
+    CreateHerd:
+      type: object
+      properties:
+        id:
+          type: string
+        establishment_id:
+          type: string
+        name:
+          type: string
+        species:
+          type: string
+          enum: [BOVINE, OVINE, PORCINE, POULTRY, OTHER]
+        animal_ids:
+          type: array
+          items:
+            type: string
+        status:
+          type: string
+          enum: [ACTIVE, DISSOLVED]
+      required:
+        - establishment_id
+        - name
+        - species
+    Batch:
+      allOf:
+        - $ref: '#/components/schemas/CoreResource'
+        - type: object
+          properties:
+            status:
+              type: string
+              enum: [CREATED, TRANSFORMED, SHIPPED, CLOSED]
+            source_type:
+              type: string
+              enum: [PARCEL, HERD]
+            source_id:
+              type: string
+            product:
+              type: string
+            quantity:
+              type: number
+            unit:
+              type: string
+          required:
+            - source_type
+            - source_id
+            - product
+    CreateBatch:
+      type: object
+      properties:
+        id:
+          type: string
+        source_type:
+          type: string
+          enum: [PARCEL, HERD]
+        source_id:
+          type: string
+        product:
+          type: string
+        quantity:
+          type: number
+        unit:
+          type: string
+        status:
+          type: string
+          enum: [CREATED, TRANSFORMED, SHIPPED, CLOSED]
+      required:
+        - source_type
+        - source_id
+        - product
