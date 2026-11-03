@@ -1,0 +1,49 @@
+# Knative Serving Service for the Open Agriculture core service (Quarkus).
+# Provider-neutral: no cloud-specific annotations, no vendor extensions.
+# Replace the image with the registry path used by the deployment
+# (e.g. ghcr.io/<org>/open-agriculture-core:0.1.0) before applying.
+# Knative injects PORT; the Quarkus application reads it via
+# quarkus.http.port=${PORT:8080} (see services/core/src/main/resources/
+# application.properties), so no extra configuration is needed.
+# Fast startup suits scale-to-zero; see ADR 0003.
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: open-agriculture-core
+  namespace: open-agriculture
+  labels:
+    app: open-agriculture-core
+    part-of: open-agriculture
+spec:
+  template:
+    metadata:
+      annotations:
+        # Scale to zero when idle; scale out under load.
+        autoscaling.knative.dev/minScale: "0"
+        autoscaling.knative.dev/maxScale: "10"
+        autoscaling.knative.dev/target: "50"
+    spec:
+      containerConcurrency: 100
+      containers:
+        - image: open-agriculture-core:0.1.0
+          ports:
+            - containerPort: 8080
+          resources:
+            requests:
+              cpu: 250m
+              memory: 256Mi
+            limits:
+              cpu: 1000m
+              memory: 1Gi
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 15
+            periodSeconds: 20
