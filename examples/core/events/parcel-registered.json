@@ -1,0 +1,27 @@
+{
+  "specversion": "1.0",
+  "id": "e0000000-0000-4000-8000-000000000003",
+  "source": "/open-agriculture/core",
+  "type": "ParcelRegistered",
+  "time": "2026-11-03T12:00:00Z",
+  "datacontenttype": "application/json",
+  "subject": "33333333-3333-4333-8333-333333333333",
+  "tenantid": "tenant-demo",
+  "correlationid": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaa3",
+  "causationid": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaa3",
+  "schemaversion": "1.0",
+  "purpose": "core-registration",
+  "dataclassification": "synthetic",
+  "data": {
+    "id": "33333333-3333-4333-8333-333333333333",
+    "tenant_id": "tenant-demo",
+    "schema_version": "1.0",
+    "status": "ACTIVE",
+    "created_at": "2026-11-03T12:00:00Z",
+    "updated_at": "2026-11-03T12:00:00Z",
+    "establishment_id": "22222222-2222-4222-8222-222222222222",
+    "name": "Lote Norte",
+    "area_ha": 12.5,
+    "soil_type": "franco"
+  }
+}

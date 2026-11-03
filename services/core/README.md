@@ -10,6 +10,14 @@ and behavior are unchanged.
 ## What it does
 
 Seven entities, all scoped by tenant from the store up:
+# Open Agriculture Core Service (contracts)
+
+Generic multi-tenant core for agriculture and livestock, and the first
+domain service of the Open Agriculture reference architecture.
+This change defines the service contract; the Java/Camel/Knative
+reference implementation follows in a follow-up PR (see issue #1).
+
+## Entities
 
 | Entity | Path | Event |
 | --- | --- | --- |
@@ -114,3 +122,6 @@ behavior via `@QuarkusTest` + RestAssured (status codes, headers,
 cross-tenant 404, health probe), and contract tests (every synthetic
 example validated against its OpenAPI/JSON Schema, plus structural
 checks on both contract documents).
+`X-Data-Classification`.
+
+Validate all YAML/JSON with `tests/validate.sh` from the repository root.

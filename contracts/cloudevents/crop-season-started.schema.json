@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.org/open-agriculture/cloudevents/crop-season-started.schema.json",
+  "title": "CropSeasonStarted",
+  "type": "object",
+  "required": ["specversion", "id", "source", "type", "time", "datacontenttype", "subject", "tenantid", "correlationid", "causationid", "schemaversion", "purpose", "dataclassification", "data"],
+  "properties": {
+    "specversion": {"const": "1.0"},
+    "id": {"type": "string", "format": "uuid"},
+    "source": {"const": "/open-agriculture/core"},
+    "type": {"const": "CropSeasonStarted"},
+    "time": {"type": "string", "format": "date-time"},
+    "datacontenttype": {"const": "application/json"},
+    "subject": {"type": "string"},
+    "tenantid": {"type": "string"},
+    "correlationid": {"type": "string", "format": "uuid"},
+    "causationid": {"type": "string"},
+    "schemaversion": {"const": "1.0"},
+    "purpose": {"type": "string"},
+    "dataclassification": {"type": "string"},
+    "data": {
+      "type": "object",
+      "required": ["id", "tenant_id", "schema_version", "status", "created_at", "updated_at", "parcel_id", "crop", "season"],
+      "properties": {
+        "id": {"type": "string"},
+        "tenant_id": {"type": "string"},
+        "schema_version": {"const": "1.0"},
+        "status": {"enum": ["PLANNED", "ACTIVE", "HARVESTED", "CLOSED"]},
+        "created_at": {"type": "string", "format": "date-time"},
+        "updated_at": {"type": "string", "format": "date-time"},
+        "parcel_id": {"type": "string"},
+        "crop": {"type": "string"},
+        "season": {"type": "string"},
+        "planned_start": {"type": "string", "format": "date"},
+        "planned_end": {"type": "string", "format": "date"}
+      }
+    }
+  },
+  "additionalProperties": true
+}

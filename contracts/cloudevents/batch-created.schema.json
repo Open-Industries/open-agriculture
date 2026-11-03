@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.org/open-agriculture/cloudevents/batch-created.schema.json",
+  "title": "BatchCreated",
+  "type": "object",
+  "required": ["specversion", "id", "source", "type", "time", "datacontenttype", "subject", "tenantid", "correlationid", "causationid", "schemaversion", "purpose", "dataclassification", "data"],
+  "properties": {
+    "specversion": {"const": "1.0"},
+    "id": {"type": "string", "format": "uuid"},
+    "source": {"const": "/open-agriculture/core"},
+    "type": {"const": "BatchCreated"},
+    "time": {"type": "string", "format": "date-time"},
+    "datacontenttype": {"const": "application/json"},
+    "subject": {"type": "string"},
+    "tenantid": {"type": "string"},
+    "correlationid": {"type": "string", "format": "uuid"},
+    "causationid": {"type": "string"},
+    "schemaversion": {"const": "1.0"},
+    "purpose": {"type": "string"},
+    "dataclassification": {"type": "string"},
+    "data": {
+      "type": "object",
+      "required": ["id", "tenant_id", "schema_version", "status", "created_at", "updated_at", "source_type", "source_id", "product"],
+      "properties": {
+        "id": {"type": "string"},
+        "tenant_id": {"type": "string"},
+        "schema_version": {"const": "1.0"},
+        "status": {"enum": ["CREATED", "TRANSFORMED", "SHIPPED", "CLOSED"]},
+        "created_at": {"type": "string", "format": "date-time"},
+        "updated_at": {"type": "string", "format": "date-time"},
+        "source_type": {"enum": ["PARCEL", "HERD"]},
+        "source_id": {"type": "string"},
+        "product": {"type": "string"},
+        "quantity": {"type": "number"},
+        "unit": {"type": "string"}
+      }
+    }
+  },
+  "additionalProperties": true
+}

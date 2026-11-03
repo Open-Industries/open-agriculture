@@ -1,0 +1,91 @@
+asyncapi: 3.0.0
+info:
+  title: Open Agriculture Core Events
+  version: 0.1.0
+  description: >-
+    Domain events emitted by the core service. Every event is a CloudEvents
+    1.0 JSON document carrying the upstream envelope as extension attributes
+    (tenantid, correlationid, causationid, schemaversion, purpose,
+    dataclassification); the payload schemas live under
+    contracts/cloudevents/ and are referenced from here. Transport content
+    type is application/cloudevents+json. No broker is mandated: the
+    reference service logs events to a local outbox, and a deployment binds
+    this channel to its own broker. License: Apache-2.0.
+  license:
+    name: Apache-2.0
+channels:
+  open-agriculture.domain-events.v1:
+    address: open-agriculture.domain-events.v1
+    description: Core domain events, version 1. Existing FarmObservationRecorded traffic on this channel is untouched.
+    messages:
+      OrganizationRegistered:
+        name: OrganizationRegistered
+        summary: A new organization (tenant) was registered
+        contentType: application/cloudevents+json
+        payload:
+          $ref: '../../contracts/cloudevents/organization-registered.schema.json'
+      EstablishmentRegistered:
+        name: EstablishmentRegistered
+        summary: A new establishment was registered
+        contentType: application/cloudevents+json
+        payload:
+          $ref: '../../contracts/cloudevents/establishment-registered.schema.json'
+      ParcelRegistered:
+        name: ParcelRegistered
+        summary: A new parcel was registered
+        contentType: application/cloudevents+json
+        payload:
+          $ref: '../../contracts/cloudevents/parcel-registered.schema.json'
+      CropSeasonStarted:
+        name: CropSeasonStarted
+        summary: A new crop season was started on a parcel
+        contentType: application/cloudevents+json
+        payload:
+          $ref: '../../contracts/cloudevents/crop-season-started.schema.json'
+      AnimalRegistered:
+        name: AnimalRegistered
+        summary: A new animal was registered
+        contentType: application/cloudevents+json
+        payload:
+          $ref: '../../contracts/cloudevents/animal-registered.schema.json'
+      HerdFormed:
+        name: HerdFormed
+        summary: A new herd was formed
+        contentType: application/cloudevents+json
+        payload:
+          $ref: '../../contracts/cloudevents/herd-formed.schema.json'
+      BatchCreated:
+        name: BatchCreated
+        summary: A new traceable batch was created from a parcel or a herd
+        contentType: application/cloudevents+json
+        payload:
+          $ref: '../../contracts/cloudevents/batch-created.schema.json'
+operations:
+  publishOrganizationRegistered:
+    action: send
+    channel:
+      $ref: '#/channels/open-agriculture.domain-events.v1'
+  publishEstablishmentRegistered:
+    action: send
+    channel:
+      $ref: '#/channels/open-agriculture.domain-events.v1'
+  publishParcelRegistered:
+    action: send
+    channel:
+      $ref: '#/channels/open-agriculture.domain-events.v1'
+  publishCropSeasonStarted:
+    action: send
+    channel:
+      $ref: '#/channels/open-agriculture.domain-events.v1'
+  publishAnimalRegistered:
+    action: send
+    channel:
+      $ref: '#/channels/open-agriculture.domain-events.v1'
+  publishHerdFormed:
+    action: send
+    channel:
+      $ref: '#/channels/open-agriculture.domain-events.v1'
+  publishBatchCreated:
+    action: send
+    channel:
+      $ref: '#/channels/open-agriculture.domain-events.v1'
