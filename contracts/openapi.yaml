@@ -1,41 +1,66 @@
 openapi: 3.1.0
 info:
-  title: Open Agriculture Reference API
-  version: 0.1.0
-  description: Provider-neutral research contract for traceable agricultural data and smart-farming services.
+  title: Open Agriculture — Reference Smart Farming Core Platform — aggregate contract
+  version: 1.0.0
+  description: >
+    Aggregate view of the platform's public REST contracts. The normative per-service
+    contracts are generated from code by Quarkus SmallRye OpenAPI at `/openapi` on each
+    service; CI diffs them against this file (see docs/api/api-standards.md).
+    Conventions: RFC 9457 errors, Idempotency-Key on creates, lifecycle transitions
+    take no body, explicit units on every quantity, all data synthetic.
 servers:
-  - url: https://api.example.org/open-agriculture/v1
+  - url: https://api.example.org/api/v1
+    description: Production (per adopter)
+security:
+  - bearerAuth: []
 paths:
-  /farm-observations/{id}:
-    get:
-      operationId: getFarmObservation
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema: { type: string }
-        - name: X-Correlation-ID
-          in: header
-          required: true
-          schema: { type: string, format: uuid }
+  /fields:
+    post:
+      operationId: create-field
+      summary: "Field registry: land units, crops and seasons (ADAPT-aligned shapes)."
       responses:
-        '200':
-          description: Domain resource
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/DomainResource'
-        '404': { description: Not found }
+        '201': { description: Created }
+        '400': { $ref: '#/components/responses/Problem' }
+  /water-budgets:
+    post:
+      operationId: create-irrigation
+      summary: "Seasonal water budgets per field and the irrigation draws against them."
+      responses:
+        '201': { description: Created }
+        '400': { $ref: '#/components/responses/Problem' }
+  /agronomy-rules:
+    post:
+      operationId: create-agronomy
+      summary: "Decision rules binding crops to water and weather envelopes, with reasoned decisions."
+      responses:
+        '201': { description: Created }
+        '400': { $ref: '#/components/responses/Problem' }
+  /machines:
+    post:
+      operationId: create-machine
+      summary: "Fleet registry: tractors, harvesters, drones and pumps."
+      responses:
+        '201': { description: Created }
+        '400': { $ref: '#/components/responses/Problem' }
+  /notifications:
+    post:
+      operationId: dispatch-notification
+      summary: Dispatch a notification
+      responses:
+        '202': { description: Accepted }
 components:
-  schemas:
-    DomainResource:
-      type: object
-      required: [id, schema_version, status, updated_at]
-      properties:
-        id: { type: string }
-        schema_version: { type: string, const: '1.0' }
-        status: { type: string }
-        updated_at: { type: string, format: date-time }
-        metadata:
-          type: object
-          additionalProperties: true
+  securitySchemes:
+    bearerAuth: { type: http, scheme: bearer, bearerFormat: JWT }
+  responses:
+    Problem:
+      description: RFC 9457 problem details
+      content:
+        application/problem+json:
+          schema:
+            type: object
+            required: [type, title, status]
+            properties:
+              type: { type: string }
+              title: { type: string }
+              status: { type: integer }
+              detail: { type: string }
